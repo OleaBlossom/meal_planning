@@ -23,6 +23,9 @@ require 'db_connect.php';
                 while ($row = $result->fetch_assoc()) { ?>
                     <div class="todo-item">
                         <span id="<?php echo $row['meal_id']; ?>" class="remove-to-do">x</span>
+                        <label>
+                            <input type="checkbox" value="">
+                        </label>
                         <h2><?php echo $row['name'] ?></h2>
                         <br>
                         <?php if ($row['last_eaten']) { ?>
