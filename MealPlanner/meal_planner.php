@@ -24,7 +24,7 @@ require 'db_connect.php';
             <br>
             <br>
             <?php
-            $sql = "SELECT * FROM meals";
+            $sql = "select distinct meal_id, name, category from meals;";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -49,18 +49,23 @@ require 'db_connect.php';
                                 <div class="collapse" id="meal_<?php echo $row['meal_id'] ?>">
                                     <div class="card card-body">
                                         <ul>
-                                            <li>One Ingredient</li>
-                                            <li>Another Thing</li>
-                                            <li>Something Else</li>
+                                            <?php
+                                            $meal_id = $row['meal_id'];
+                                            $sql_ingredients = "select m.ingredient_amount as amount, m.unit as unit, i.name as name from meals m inner join ingredients i on m.ingredient_id = i.id where m.meal_id = $meal_id";
+                                            $ingredients_list = $conn->query($sql_ingredients);
+                                            if ($ingredients_list->num_rows > 0) {
+                                                // output data of each row
+                                                while ($ingredient_row = $ingredients_list->fetch_assoc()) { ?>
+                                                    <li><?php echo $ingredient_row['amount'] ?>
+                                                        <?php echo $ingredient_row['unit'] ?>
+                                                        <?php echo $ingredient_row['name'] ?></li>
+                                                <?php } ?>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="card-footer text-muted">
-                                    <?php if ($row['last_eaten']) { ?>
-                                        last eaten: <?php echo $row['last_eaten'] ?>
-                                    <?php } else { ?>
-                                        last eaten: never
-                                    <?php } ?></p>
+                                    last eaten: never
                                 </div>
                             </div>
                             <br>
